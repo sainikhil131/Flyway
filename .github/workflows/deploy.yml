@@ -7,38 +7,28 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production   # 👈 THIS ENABLES APPROVAL
+    environment: production
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Java (for Flyway)
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
-      
       - name: Run Flyway migrations
         uses: flyway/flyway-action@v3
-
         with:
           args: >
-              -configFiles=flyway/conf/flyway.conf
-              migrate
+            -configFiles=flyway/conf/flyway.conf
+            migrate
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: |
-          ./flyway-11.20.4/flyway \
-            -configFiles=flyway/conf/flyway.conf \
-            migrate
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
 
       - name: Start FastAPI (sanity check)
         run: |
-          pip install -r requirements.txt
           uvicorn app.main:app --host 0.0.0.0 --port 8000 &
           sleep 5
