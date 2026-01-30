@@ -36,7 +36,7 @@ jobs:
             flyway/flyway:11 \
             -url="jdbc:postgresql://localhost:5432/flyway_test" \
             -user="postgres" \
-            -password="postgres123" \
+            -password="Mysql@123" \
             migrate
 
 
