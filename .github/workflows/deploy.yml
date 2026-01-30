@@ -1,34 +1,26 @@
-name: FastAPI + Flyway (With Approval)
-
-on:
-  push:
-    branches: [ "main" ]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    environment: production
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run Flyway migrations
-        uses: redgate/flyway@v3
-        with:
-          args: >
-            -configFiles=flyway/conf/flyway.conf
-            migrate
-        env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
-
-      - name: Start FastAPI (sanity check)
-        run: |
-          uvicorn app.main:app --host 0.0.0.0 --port 8000 &
-          sleep 5
+Current runner version: '2.331.0'
+Runner Image Provisioner
+  Hosted Compute Agent
+  Version: 20260123.484
+  Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+  Build Date: 2026-01-23T19:41:17Z
+  Worker ID: {89e00756-59a7-46d1-94e0-a4e8860fde68}
+  Azure Region: eastus2
+Operating System
+  Ubuntu
+  24.04.3
+  LTS
+Runner Image
+  Image: ubuntu-24.04
+  Version: 20260126.10.1
+  Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260126.10/images/ubuntu/Ubuntu2404-Readme.md
+  Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260126.10
+GITHUB_TOKEN Permissions
+  Contents: read
+  Metadata: read
+  Packages: read
+Secret source: Actions
+Prepare workflow directory
+Prepare all required actions
+Getting action download info
+Error: Unable to resolve action redgate/flyway, repository not found
