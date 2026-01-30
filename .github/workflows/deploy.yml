@@ -20,13 +20,16 @@ jobs:
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
+          echo "DB_HOST=$DB_HOST"
+          echo "DB_NAME=$DB_NAME"
+
           docker run --rm \
-            -v ${{ github.workspace }}/flyway/sql:/flyway/sql \
-            flyway/flyway:11 \
-            -url=jdbc:postgresql://$DB_HOST:5432/$DB_NAME \
-            -user=$DB_USER \
-            -password=$DB_PASSWORD \
-            migrate
+          -v "${{ github.workspace }}/flyway/sql:/flyway/sql" \
+          flyway/flyway:11 \
+          -url="jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}" \
+          -user="${DB_USER}" \
+          -password="${DB_PASSWORD}" \
+          migrate
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
