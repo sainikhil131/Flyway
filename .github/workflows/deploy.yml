@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Flyway migrations
-        uses: redgate/flyway-action@v3
+        uses: redgate/flyway@v3
         with:
           args: >
             -configFiles=flyway/conf/flyway.conf
