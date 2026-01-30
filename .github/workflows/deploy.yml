@@ -9,27 +9,36 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: flyway_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres123
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Run Flyway migrations (Docker)
-        env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
-          echo "DB_HOST=$DB_HOST"
-          echo "DB_NAME=$DB_NAME"
-
           docker run --rm \
-          -v "${{ github.workspace }}/flyway/sql:/flyway/sql" \
-          flyway/flyway:11 \
-          -url="jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}" \
-          -user="${DB_USER}" \
-          -password="${DB_PASSWORD}" \
-          migrate
+            --network host \
+            -v "${{ github.workspace }}/flyway/sql:/flyway/sql" \
+            flyway/flyway:11 \
+            -url="jdbc:postgresql://localhost:5432/flyway_test" \
+            -user="postgres" \
+            -password="postgres123" \
+            migrate
+
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
