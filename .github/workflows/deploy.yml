@@ -19,12 +19,14 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Download Flyway
-        run: |
-          wget https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/11.20.4/flyway-commandline-11.20.4-linux-x64.tar.gz
-          tar -xzf flyway-commandline-11.20.4-linux-x64.tar.gz
-
+      
       - name: Run Flyway migrations
+        uses: flyway/flyway-action@v3
+
+        with:
+          args: >
+              -configFiles=flyway/conf/flyway.conf
+              migrate
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_NAME: ${{ secrets.DB_NAME }}
