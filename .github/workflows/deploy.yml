@@ -32,7 +32,7 @@ jobs:
         run: |
           docker run --rm \
             --network host \
-            -v "${{ github.workspace }}/flyway/sql:/flyway/sql" \
+            -v "${{ github.workspace }}/sql:/flyway/sql" \
             flyway/flyway:11 \
             -url="jdbc:postgresql://localhost:5432/flyway_test" \
             -user="postgres" \
