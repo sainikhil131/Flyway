@@ -1,1 +1,2 @@
-V5__add_test_column.sql
+ALTER TABLE users
+ADD COLUMN test_column VARCHAR(50);
